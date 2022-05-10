@@ -1,9 +1,10 @@
 package simulator
 
+import "fmt"
+
 type Alien struct {
-	id int
 	name string
-	position *City
+	city string
 }
 
 type City struct {
@@ -17,6 +18,7 @@ type City struct {
 
 type WorldMap struct {
 	cities map[string]*City
+	aliens map[string]*Alien
 }
 
 func(m *WorldMap) init() {
@@ -59,4 +61,11 @@ func(m *WorldMap) addCity(name string, east string, north string, west string, s
 	}
 
 	m.cities[name] = &city
+}
+
+func(m *WorldMap) addAlien(alien *Alien) {
+	if m.aliens[alien.city] == nil {
+		panic(fmt.Errorf("Trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
+	}
+	m.aliens[alien.city] = alien
 }
