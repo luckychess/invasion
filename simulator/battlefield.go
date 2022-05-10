@@ -21,8 +21,11 @@ type WorldMap struct {
 	aliens map[string]*Alien
 }
 
-func(m *WorldMap) init() {
-	m.cities = make(map[string]*City)
+func initWorldMap() WorldMap {
+	worldMap := WorldMap{}
+	worldMap.cities = make(map[string]*City)
+	worldMap.aliens = make(map[string]*Alien)
+	return worldMap
 }
 
 func(m *WorldMap) addCity(name string, east string, north string, west string, south string) {
