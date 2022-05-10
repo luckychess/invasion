@@ -69,3 +69,24 @@ func(m *WorldMap) addAlien(alien *Alien) {
 	}
 	m.aliens[alien.city] = alien
 }
+
+func(m *WorldMap) destroyCity(alienFirst *Alien, alienSecond *Alien) {
+	if alienFirst.city == alienSecond.city {
+		city := m.cities[alienFirst.city]
+		if city.east != nil {
+			city.east.west = nil
+		}
+		if city.north != nil {
+			city.north.south = nil
+		}
+		if city.west != nil {
+			city.west.east = nil
+		}
+		if city.south != nil {
+			city.south.north = nil
+		}
+		delete(m.cities, city.name)
+		delete(m.aliens, alienFirst.name)
+		delete(m.aliens, alienSecond.name)
+	}
+}
