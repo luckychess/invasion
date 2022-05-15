@@ -28,38 +28,42 @@ func initWorldMap() WorldMap {
 	return worldMap
 }
 
-func(m *WorldMap) addCity(name string, east string, north string, west string, south string) {
+func (m *WorldMap) addCity(name string, east string, north string, west string, south string) {
 	city := City{name: name, destroyed: false}
 	if east != "" {
 		eastCity := m.cities[east]
-		if eastCity != nil {
-			city.east = eastCity
-			eastCity.west = &city
+		if eastCity == nil {
+			eastCity = &City{name: east, east: nil, north: nil, west: &city, south: nil}
 		}
+		city.east = eastCity
+		eastCity.west = &city
 		m.cities[east] = eastCity
 	}
 	if north != "" {
 		northCity := m.cities[north]
-		if northCity != nil {
-			city.north = northCity
-			northCity.south = &city
+		if northCity == nil {
+			northCity = &City{name: north, east: nil, north: nil, west: nil, south: &city}
 		}
+		city.north = northCity
+		northCity.south = &city
 		m.cities[north] = northCity
 	}
 	if west != "" {
 		westCity := m.cities[west]
-		if westCity != nil {
-			city.west = westCity
-			westCity.east = &city
+		if westCity == nil {
+			westCity = &City{name: west, east: &city, north: nil, west: nil, south: nil}
 		}
+		city.west = westCity
+		westCity.east = &city
 		m.cities[west] = westCity
 	}
 	if south != "" {
 		southCity := m.cities[south]
-		if southCity != nil {
-			city.south = southCity
-			southCity.north = &city
+		if southCity == nil {
+			southCity = &City{name: south, east: nil, north: &city, west: nil, south: nil}
 		}
+		city.south = southCity
+		southCity.north = &city
 		m.cities[south] = southCity
 	}
 
