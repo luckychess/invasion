@@ -69,11 +69,12 @@ func (m *WorldMap) addCity(name string, east string, north string, west string, 
 	m.cities[name] = &city
 }
 
-func (m *WorldMap) addAlien(alien *Alien) {
+func (m *WorldMap) addAlien(alien *Alien) error {
 	if m.cities[alien.city] == nil {
-		panic(fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
+		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
 	}
 	m.aliens[alien.name] = alien
+	return nil
 }
 
 func (m *WorldMap) destroyCity(alienFirst *Alien, alienSecond *Alien) {

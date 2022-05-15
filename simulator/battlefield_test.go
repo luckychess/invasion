@@ -93,17 +93,13 @@ func TestMultipleCitiesMap(t *testing.T) {
 func TestAddAlien(t *testing.T) {
 	wm := initWorldMap()
 	wm.addCity("Zurich", "", "Frankfurt", "", "Milan")
-	wm.addAlien(&Alien{name: "The Evil", city: "Zurich"})
+	assert.Assert(t, wm.addAlien(&Alien{name: "The Evil", city: "Zurich"}) == nil)
 	// Alien should be added as expected
 	assert.Assert(t, wm.aliens["The Evil"].city == "Zurich")
 	assert.Assert(t, wm.aliens["The Evil"].name == "The Evil")
 
-	defer func() {
-		r := recover()
-		assert.Assert(t, r != nil)
-	}()
-	// Expect exception when attempt to invade non-existing city
-	wm.addAlien(&Alien{name: "Not very clever", city: "Moscow"})
+	// Expect non-zero error when attempt to invade non-existing city
+	assert.Assert(t, wm.addAlien(&Alien{name: "Not very clever", city: "Moscow"}) != nil)
 }
 
 func TestDestroyCity(t *testing.T) {
