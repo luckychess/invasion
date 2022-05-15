@@ -8,12 +8,12 @@ type Alien struct {
 }
 
 type City struct {
-	name string
+	name      string
 	destroyed bool
-	east *City
-	north *City
-	west *City
-	south *City
+	east      *City
+	north     *City
+	west      *City
+	south     *City
 }
 
 type WorldMap struct {
@@ -70,14 +70,14 @@ func (m *WorldMap) addCity(name string, east string, north string, west string, 
 	m.cities[name] = &city
 }
 
-func(m *WorldMap) addAlien(alien *Alien) {
+func (m *WorldMap) addAlien(alien *Alien) {
 	if m.aliens[alien.city] == nil {
-		panic(fmt.Errorf("Trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
+		panic(fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
 	}
 	m.aliens[alien.city] = alien
 }
 
-func(m *WorldMap) destroyCity(alienFirst *Alien, alienSecond *Alien) {
+func (m *WorldMap) destroyCity(alienFirst *Alien, alienSecond *Alien) {
 	if alienFirst.city == alienSecond.city {
 		city := m.cities[alienFirst.city]
 		if city.east != nil {
