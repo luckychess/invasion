@@ -8,12 +8,11 @@ type Alien struct {
 }
 
 type City struct {
-	name      string
-	destroyed bool
-	east      *City
-	north     *City
-	west      *City
-	south     *City
+	name  string
+	east  *City
+	north *City
+	west  *City
+	south *City
 }
 
 type WorldMap struct {
@@ -29,7 +28,7 @@ func initWorldMap() WorldMap {
 }
 
 func (m *WorldMap) addCity(name string, east string, north string, west string, south string) {
-	city := City{name: name, destroyed: false}
+	city := City{name: name}
 	if east != "" {
 		eastCity := m.cities[east]
 		if eastCity == nil {
