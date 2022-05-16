@@ -1,4 +1,4 @@
-package simulator
+package world
 
 import (
 	"testing"
@@ -9,16 +9,16 @@ import (
 var cities = []string{"Heidelberg", "Cologne", "Frankfurt", "Munich", "Berlin", "Strasbourg", "Nuremberg", "Regensburg", "Leipzig"}
 
 func TestInitWorldMap(t *testing.T) {
-	wm := initWorldMap()
+	wm := InitWorldMap()
 	// no cities, no aliens
 	assert.Assert(t, len(wm.cities) == 0)
 	assert.Assert(t, len(wm.aliens) == 0)
 }
 
 func TestSingleCityMap(t *testing.T) {
-	wm := initWorldMap()
+	wm := InitWorldMap()
 	name := "Heidelberg"
-	wm.addCity(name, "", "", "", "")
+	wm.AddCity(name, "", "", "", "")
 	// only 1 city and no aliens so far
 	assert.Assert(t, len(wm.cities) == 1)
 	assert.Assert(t, len(wm.aliens) == 0)
@@ -91,24 +91,24 @@ func TestMultipleCitiesMap(t *testing.T) {
 }
 
 func TestAddAlien(t *testing.T) {
-	wm := initWorldMap()
-	wm.addCity("Zurich", "", "Frankfurt", "", "Milan")
-	assert.Assert(t, wm.addAlien(&Alien{name: "The Evil", city: "Zurich"}) == nil)
+	wm := InitWorldMap()
+	wm.AddCity("Zurich", "", "Frankfurt", "", "Milan")
+	assert.Assert(t, wm.AddAlien(&Alien{name: "The Evil", city: "Zurich"}) == nil)
 	// Alien should be added as expected
 	assert.Assert(t, wm.aliens["The Evil"].city == "Zurich")
 	assert.Assert(t, wm.aliens["The Evil"].name == "The Evil")
 
 	// Expect non-zero error when attempt to invade non-existing city
-	assert.Assert(t, wm.addAlien(&Alien{name: "Not very clever", city: "Moscow"}) != nil)
+	assert.Assert(t, wm.AddAlien(&Alien{name: "Not very clever", city: "Moscow"}) != nil)
 }
 
 func TestDestroyCity(t *testing.T) {
 	wm := createSimpleMap()
 	alien1 := &Alien{name: "Green dude", city: cities[2]}
 	alien2 := &Alien{name: "Earth invader", city: cities[2]}
-	wm.addAlien(alien1)
-	wm.addAlien(alien2)
-	wm.destroyCity(alien1, alien2)
+	wm.AddAlien(alien1)
+	wm.AddAlien(alien2)
+	wm.DestroyCity(alien1, alien2)
 	// Frankfurt should be destroyed now and aliens should be dead
 	assert.Assert(t, wm.aliens[alien1.name] == nil)
 	assert.Assert(t, wm.aliens[alien2.name] == nil)
@@ -129,15 +129,15 @@ func createSimpleMap() *WorldMap {
 			|	|
 			H - M
 	*/
-	wm := initWorldMap()
-	wm.addCity(cities[4], "", "", cities[1], "")
-	wm.addCity(cities[1], cities[4], "", "", cities[2])
-	wm.addCity(cities[2], cities[6], cities[1], cities[5], cities[0])
-	wm.addCity(cities[5], cities[2], "", "", "")
-	wm.addCity(cities[6], "", "", cities[2], cities[3])
-	wm.addCity(cities[0], cities[3], cities[2], "", "")
-	wm.addCity(cities[3], "", cities[6], cities[0], "")
-	wm.addCity(cities[7], "", cities[8], "", "")
+	wm := InitWorldMap()
+	wm.AddCity(cities[4], "", "", cities[1], "")
+	wm.AddCity(cities[1], cities[4], "", "", cities[2])
+	wm.AddCity(cities[2], cities[6], cities[1], cities[5], cities[0])
+	wm.AddCity(cities[5], cities[2], "", "", "")
+	wm.AddCity(cities[6], "", "", cities[2], cities[3])
+	wm.AddCity(cities[0], cities[3], cities[2], "", "")
+	wm.AddCity(cities[3], "", cities[6], cities[0], "")
+	wm.AddCity(cities[7], "", cities[8], "", "")
 
 	return &wm
 }

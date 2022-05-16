@@ -1,4 +1,4 @@
-package simulator
+package world
 
 import "fmt"
 
@@ -20,14 +20,14 @@ type WorldMap struct {
 	aliens map[string]*Alien
 }
 
-func initWorldMap() WorldMap {
+func InitWorldMap() WorldMap {
 	worldMap := WorldMap{}
 	worldMap.cities = make(map[string]*City)
 	worldMap.aliens = make(map[string]*Alien)
 	return worldMap
 }
 
-func (m *WorldMap) addCity(name string, east string, north string, west string, south string) {
+func (m *WorldMap) AddCity(name string, east string, north string, west string, south string) {
 	city := City{name: name}
 	if east != "" {
 		eastCity := m.cities[east]
@@ -69,7 +69,7 @@ func (m *WorldMap) addCity(name string, east string, north string, west string, 
 	m.cities[name] = &city
 }
 
-func (m *WorldMap) addAlien(alien *Alien) error {
+func (m *WorldMap) AddAlien(alien *Alien) error {
 	if m.cities[alien.city] == nil {
 		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
 	}
@@ -77,7 +77,7 @@ func (m *WorldMap) addAlien(alien *Alien) error {
 	return nil
 }
 
-func (m *WorldMap) destroyCity(alienFirst *Alien, alienSecond *Alien) {
+func (m *WorldMap) DestroyCity(alienFirst *Alien, alienSecond *Alien) {
 	if alienFirst.city == alienSecond.city {
 		city := m.cities[alienFirst.city]
 		if city.east != nil {
