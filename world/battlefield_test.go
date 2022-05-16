@@ -93,26 +93,26 @@ func TestMultipleCitiesMap(t *testing.T) {
 func TestAddAlien(t *testing.T) {
 	wm := InitWorldMap()
 	wm.AddCity("Zurich", "", "Frankfurt", "", "Milan")
-	assert.Assert(t, wm.AddAlien(&Alien{name: "The Evil", city: "Zurich"}) == nil)
+	assert.Assert(t, wm.AddAlien(&Alien{Name: "The Evil", City: "Zurich"}) == nil)
 	// Alien should be added as expected
-	assert.Assert(t, wm.aliens["The Evil"].city == "Zurich")
-	assert.Assert(t, wm.aliens["The Evil"].name == "The Evil")
+	assert.Assert(t, wm.aliens["The Evil"].City == "Zurich")
+	assert.Assert(t, wm.aliens["The Evil"].Name == "The Evil")
 
 	// Expect non-zero error when attempt to invade non-existing city
-	assert.Assert(t, wm.AddAlien(&Alien{name: "Not very clever", city: "Moscow"}) != nil)
+	assert.Assert(t, wm.AddAlien(&Alien{Name: "Not very clever", City: "Moscow"}) != nil)
 }
 
 func TestDestroyCity(t *testing.T) {
 	wm := createSimpleMap()
-	alien1 := &Alien{name: "Green dude", city: cities[2]}
-	alien2 := &Alien{name: "Earth invader", city: cities[2]}
+	alien1 := &Alien{Name: "Green dude", City: cities[2]}
+	alien2 := &Alien{Name: "Earth invader", City: cities[2]}
 	wm.AddAlien(alien1)
 	wm.AddAlien(alien2)
 	wm.DestroyCity(alien1, alien2)
 	// Frankfurt should be destroyed now and aliens should be dead
-	assert.Assert(t, wm.aliens[alien1.name] == nil)
-	assert.Assert(t, wm.aliens[alien2.name] == nil)
-	assert.Assert(t, wm.cities[alien1.name] == nil)
+	assert.Assert(t, wm.aliens[alien1.Name] == nil)
+	assert.Assert(t, wm.aliens[alien2.Name] == nil)
+	assert.Assert(t, wm.cities[alien1.Name] == nil)
 	// Frankfurt connections are also destroyed now
 	assert.Assert(t, wm.cities[cities[6]].west == nil)
 	assert.Assert(t, wm.cities[cities[1]].south == nil)

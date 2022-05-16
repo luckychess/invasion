@@ -3,8 +3,8 @@ package world
 import "fmt"
 
 type Alien struct {
-	name string
-	city string
+	Name string
+	City string
 }
 
 type City struct {
@@ -70,16 +70,16 @@ func (m *WorldMap) AddCity(name string, east string, north string, west string, 
 }
 
 func (m *WorldMap) AddAlien(alien *Alien) error {
-	if m.cities[alien.city] == nil {
-		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.name, alien.city))
+	if m.cities[alien.City] == nil {
+		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.Name, alien.City))
 	}
-	m.aliens[alien.name] = alien
+	m.aliens[alien.Name] = alien
 	return nil
 }
 
 func (m *WorldMap) DestroyCity(alienFirst *Alien, alienSecond *Alien) {
-	if alienFirst.city == alienSecond.city {
-		city := m.cities[alienFirst.city]
+	if alienFirst.City == alienSecond.City {
+		city := m.cities[alienFirst.City]
 		if city.east != nil {
 			city.east.west = nil
 		}
@@ -93,7 +93,7 @@ func (m *WorldMap) DestroyCity(alienFirst *Alien, alienSecond *Alien) {
 			city.south.north = nil
 		}
 		delete(m.cities, city.name)
-		delete(m.aliens, alienFirst.name)
-		delete(m.aliens, alienSecond.name)
+		delete(m.aliens, alienFirst.Name)
+		delete(m.aliens, alienSecond.Name)
 	}
 }
