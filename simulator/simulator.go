@@ -26,9 +26,30 @@ func InitSimulation(worldMap *world.WorldMap, aliens uint32) simulator {
 
 func (sim *simulator) Simulate() {
 	sim.unleashAliens()
+	for i := 0; i < int(sim.stepsCount); i++ {
+		for alien := range world.InitWorldMap().Aliens {
+			sim.moveAlien(world.InitWorldMap().Aliens[alien])
+		}
+		sim.fightAliens()
+	}
 }
 
 func (sim *simulator) StopSimulation() {}
+
+func (sim *simulator) moveAlien(alien *world.Alien) {
+	city := sim.worldMap.Cities[alien.City]
+	directions := city.GetDirections()
+	if len(directions) > 0 {
+		direction := directions[sim.rand.Intn(len(directions))]
+		alien.City = city.GetNeighbour(direction)
+	}
+}
+
+func (sim *simulator) fightAliens() {
+	for city := range sim.worldMap.Cities {
+		sim.worldMap.DestroyCity(city)
+	}
+}
 
 func (sim *simulator) unleashAliens() {
 	for i := 0; i < int(sim.aliensCount); i++ {
@@ -38,7 +59,6 @@ func (sim *simulator) unleashAliens() {
 		alien := world.Alien{Name: name, City: city}
 		sim.worldMap.AddAlien(&alien)
 	}
-
 }
 
 func (sim *simulator) getRandomName() string {

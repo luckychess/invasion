@@ -19,6 +19,39 @@ type City struct {
 	aliens []string
 }
 
+func (c *City) GetDirections() []string {
+	directions := make([]string, 0)
+	if c.east != nil {
+		directions = append(directions, "east")
+	}
+	if c.north != nil {
+		directions = append(directions, "north")
+	}
+	if c.west != nil {
+		directions = append(directions, "west")
+	}
+	if c.south != nil {
+		directions = append(directions, "south")
+	}
+	return directions
+}
+
+func (c *City) GetNeighbour(direction string) string {
+	switch direction {
+	case "east":
+		return c.east.name
+	case "north":
+		return c.north.name
+	case "west":
+		return c.west.name
+	case "south":
+		return c.south.name
+	default:
+		log.Fatalf("Wrong direction %s\n", direction)
+		return ""
+	}
+}
+
 type WorldMap struct {
 	Cities map[string]*City
 	Aliens map[string]*Alien
