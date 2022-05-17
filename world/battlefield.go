@@ -16,70 +16,70 @@ type City struct {
 }
 
 type WorldMap struct {
-	cities map[string]*City
-	aliens map[string]*Alien
+	Cities map[string]*City
+	Aliens map[string]*Alien
 }
 
 func InitWorldMap() WorldMap {
 	worldMap := WorldMap{}
-	worldMap.cities = make(map[string]*City)
-	worldMap.aliens = make(map[string]*Alien)
+	worldMap.Cities = make(map[string]*City)
+	worldMap.Aliens = make(map[string]*Alien)
 	return worldMap
 }
 
 func (m *WorldMap) AddCity(name string, east string, north string, west string, south string) {
 	city := City{name: name}
 	if east != "" {
-		eastCity := m.cities[east]
+		eastCity := m.Cities[east]
 		if eastCity == nil {
 			eastCity = &City{name: east, east: nil, north: nil, west: &city, south: nil}
 		}
 		city.east = eastCity
 		eastCity.west = &city
-		m.cities[east] = eastCity
+		m.Cities[east] = eastCity
 	}
 	if north != "" {
-		northCity := m.cities[north]
+		northCity := m.Cities[north]
 		if northCity == nil {
 			northCity = &City{name: north, east: nil, north: nil, west: nil, south: &city}
 		}
 		city.north = northCity
 		northCity.south = &city
-		m.cities[north] = northCity
+		m.Cities[north] = northCity
 	}
 	if west != "" {
-		westCity := m.cities[west]
+		westCity := m.Cities[west]
 		if westCity == nil {
 			westCity = &City{name: west, east: &city, north: nil, west: nil, south: nil}
 		}
 		city.west = westCity
 		westCity.east = &city
-		m.cities[west] = westCity
+		m.Cities[west] = westCity
 	}
 	if south != "" {
-		southCity := m.cities[south]
+		southCity := m.Cities[south]
 		if southCity == nil {
 			southCity = &City{name: south, east: nil, north: &city, west: nil, south: nil}
 		}
 		city.south = southCity
 		southCity.north = &city
-		m.cities[south] = southCity
+		m.Cities[south] = southCity
 	}
 
-	m.cities[name] = &city
+	m.Cities[name] = &city
 }
 
 func (m *WorldMap) AddAlien(alien *Alien) error {
-	if m.cities[alien.City] == nil {
+	if m.Cities[alien.City] == nil {
 		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.Name, alien.City))
 	}
-	m.aliens[alien.Name] = alien
+	m.Aliens[alien.Name] = alien
 	return nil
 }
 
 func (m *WorldMap) DestroyCity(alienFirst *Alien, alienSecond *Alien) {
 	if alienFirst.City == alienSecond.City {
-		city := m.cities[alienFirst.City]
+		city := m.Cities[alienFirst.City]
 		if city.east != nil {
 			city.east.west = nil
 		}
@@ -92,8 +92,8 @@ func (m *WorldMap) DestroyCity(alienFirst *Alien, alienSecond *Alien) {
 		if city.south != nil {
 			city.south.north = nil
 		}
-		delete(m.cities, city.name)
-		delete(m.aliens, alienFirst.Name)
-		delete(m.aliens, alienSecond.Name)
+		delete(m.Cities, city.name)
+		delete(m.Aliens, alienFirst.Name)
+		delete(m.Aliens, alienSecond.Name)
 	}
 }
