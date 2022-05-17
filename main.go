@@ -11,6 +11,7 @@ import (
 
 // program entry point
 func main() {
+	log.SetFlags(0)
 	totalAliens := 2
 	lines := readFile("input.txt")
 	worldMap := parseInput(lines)

@@ -146,7 +146,11 @@ func (m *WorldMap) DestroyCity(cityToDestroy string) {
 		for alien := range city.aliens {
 			delete(m.Aliens, alien)
 		}
-		log.Printf("%s has been destroyed by aliens %v\n", cityToDestroy, city.aliens)
+		aliens := ""
+		for alien := range city.aliens {
+			aliens += alien + " "
+		}
+		log.Printf("%s has been destroyed by aliens %s\n", cityToDestroy, aliens)
 		city.aliens = nil
 	}
 }

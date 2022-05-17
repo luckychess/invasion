@@ -1,6 +1,7 @@
 package simulator
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -39,7 +40,18 @@ func (sim *simulator) Simulate() {
 }
 
 func (sim *simulator) StopSimulation() {
-	log.Println("Done")
+	log.Println("=== Simulation finished ===")
+	for name, city := range sim.worldMap.Cities {
+		cityOutput := fmt.Sprintf("%s ", name)
+		directions := city.GetDirections()
+		for _, dir := range directions {
+			neighbour := city.GetNeighbour(dir)
+			if neighbour != "" {
+				cityOutput += fmt.Sprintf("%s=%s ", dir, neighbour)
+			}
+		}
+		log.Print(cityOutput)
+	}
 }
 
 func (sim *simulator) fightAliens() {
@@ -52,7 +64,7 @@ func (sim *simulator) unleashAliens() {
 	for i := 0; i < int(sim.aliensCount); i++ {
 		name := sim.getRandomName()
 		city := sim.getRandomCity()
-		log.Printf("Unleasing alien %s into city %s\n", name, city)
+		log.Printf("Unleashing alien %s into city %s\n", name, city)
 		alien := world.Alien{Name: name, City: city}
 		sim.worldMap.AddAlien(&alien)
 	}
