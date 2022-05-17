@@ -108,7 +108,7 @@ func TestDestroyCity(t *testing.T) {
 	alien2 := &Alien{Name: "Earth invader", City: cities[2]}
 	wm.AddAlien(alien1)
 	wm.AddAlien(alien2)
-	wm.DestroyCity(alien1, alien2)
+	wm.DestroyCity(cities[2])
 	// Frankfurt should be destroyed now and aliens should be dead
 	assert.Assert(t, wm.Aliens[alien1.Name] == nil)
 	assert.Assert(t, wm.Aliens[alien2.Name] == nil)
