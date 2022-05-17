@@ -11,9 +11,10 @@ import (
 
 // program entry point
 func main() {
+	totalAliens := 2
 	lines := readFile("input.txt")
 	worldMap := parseInput(lines)
-	simulator := simulator.InitSimulation(&worldMap)
+	simulator := simulator.InitSimulation(&worldMap, uint32(totalAliens))
 	simulator.Simulate()
 	simulator.StopSimulation()
 }
