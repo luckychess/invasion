@@ -20,19 +20,19 @@ type simulator struct {
 	aliensCount uint32
 }
 
-func InitSimulation(worldMap *world.WorldMap, aliens uint32) simulator {
+func InitSimulation(worldMap world.WorldMap, aliens uint32) simulator {
 	rand := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return simulator{worldMap: *worldMap, rand: rand, stepsCount: simulatorSteps, aliensCount: aliens}
+	return simulator{worldMap: worldMap, rand: rand, stepsCount: simulatorSteps, aliensCount: aliens}
 }
 
 func (sim *simulator) Simulate() {
 	sim.unleashAliens()
 	for i := 0; i < int(sim.stepsCount); i++ {
-		if len(sim.worldMap.Aliens) == 0 {
+		if len(sim.worldMap.GetAliens()) == 0 {
 			log.Println("No more aliens to fight, stopping simulation")
 			break
 		}
-		for _, alien := range sim.worldMap.Aliens {
+		for _, alien := range sim.worldMap.GetAliens() {
 			sim.worldMap.MoveAlien(alien, sim.rand)
 		}
 		sim.fightAliens()
@@ -41,7 +41,7 @@ func (sim *simulator) Simulate() {
 
 func (sim *simulator) StopSimulation() {
 	log.Println("=== Simulation finished ===")
-	for name, city := range sim.worldMap.Cities {
+	for name, city := range sim.worldMap.GetCities() {
 		cityOutput := fmt.Sprintf("%s ", name)
 		directions := city.GetDirections()
 		for _, dir := range directions {
@@ -57,7 +57,7 @@ func (sim *simulator) StopSimulation() {
 }
 
 func (sim *simulator) fightAliens() {
-	for city := range sim.worldMap.Cities {
+	for city := range sim.worldMap.GetCities() {
 		sim.worldMap.DestroyCity(city)
 	}
 }
@@ -88,8 +88,8 @@ func (sim *simulator) getRandomCity() string {
 	// O(1) is possible but more complicated
 	// e.g. requires creating and maintaining
 	// a separate slice with keys
-	keys := make([]string, 0, len(sim.worldMap.Cities))
-	for k := range sim.worldMap.Cities {
+	keys := make([]string, 0, len(sim.worldMap.GetCities()))
+	for k := range sim.worldMap.GetCities() {
 		keys = append(keys, k)
 	}
 	return keys[sim.rand.Intn(len(keys))]

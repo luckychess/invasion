@@ -61,19 +61,36 @@ func (c *City) GetNeighbour(direction string) (string, error) {
 	return "", fmt.Errorf("no cities in %s direction", direction)
 }
 
-type WorldMap struct {
+type WorldMap interface {
+	GetCities() map[string]*City
+	GetAliens() map[string]*Alien
+	AddCity(name string, east string, north string, west string, south string)
+	AddAlien(alien *Alien) error
+	MoveAlien(alien *Alien, rng *rand.Rand)
+	DestroyCity(cityToDestroy string)
+}
+
+type worldMapImpl struct {
 	Cities map[string]*City
 	Aliens map[string]*Alien
 }
 
 func InitWorldMap() WorldMap {
-	worldMap := WorldMap{}
+	worldMap := worldMapImpl{}
 	worldMap.Cities = make(map[string]*City)
 	worldMap.Aliens = make(map[string]*Alien)
-	return worldMap
+	return &worldMap
 }
 
-func (m *WorldMap) AddCity(name string, east string, north string, west string, south string) {
+func (m *worldMapImpl) GetCities() map[string]*City {
+	return m.Cities
+}
+
+func (m *worldMapImpl) GetAliens() map[string]*Alien {
+	return m.Aliens
+}
+
+func (m *worldMapImpl) AddCity(name string, east string, north string, west string, south string) {
 	city := City{name: name, aliens: make(map[string]bool)}
 	if east != "" {
 		eastCity := m.Cities[east]
@@ -115,7 +132,7 @@ func (m *WorldMap) AddCity(name string, east string, north string, west string, 
 	m.Cities[name] = &city
 }
 
-func (m *WorldMap) AddAlien(alien *Alien) error {
+func (m *worldMapImpl) AddAlien(alien *Alien) error {
 	if m.Cities[alien.City] == nil {
 		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.Name, alien.City))
 	}
@@ -124,7 +141,7 @@ func (m *WorldMap) AddAlien(alien *Alien) error {
 	return nil
 }
 
-func (m *WorldMap) MoveAlien(alien *Alien, rng *rand.Rand) {
+func (m *worldMapImpl) MoveAlien(alien *Alien, rng *rand.Rand) {
 	city := m.Cities[alien.City]
 	directions := city.GetDirections()
 	if len(directions) > 0 {
@@ -140,7 +157,7 @@ func (m *WorldMap) MoveAlien(alien *Alien, rng *rand.Rand) {
 	}
 }
 
-func (m *WorldMap) DestroyCity(cityToDestroy string) {
+func (m *worldMapImpl) DestroyCity(cityToDestroy string) {
 	city := m.Cities[cityToDestroy]
 	if len(city.aliens) > 1 {
 		if city.east != nil {
