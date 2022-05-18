@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 
 	"github.com/luckychess/invasion/world"
 )
@@ -15,14 +14,13 @@ const (
 
 type simulator struct {
 	worldMap    world.WorldMap
-	rand        *rand.Rand
+	rng         *rand.Rand
 	stepsCount  uint32
 	aliensCount uint32
 }
 
-func InitSimulation(worldMap world.WorldMap, aliens uint32) simulator {
-	rand := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return simulator{worldMap: worldMap, rand: rand, stepsCount: simulatorSteps, aliensCount: aliens}
+func InitSimulation(worldMap world.WorldMap, rng *rand.Rand, aliens uint32) simulator {
+	return simulator{worldMap: worldMap, rng: rng, stepsCount: simulatorSteps, aliensCount: aliens}
 }
 
 func (sim *simulator) Simulate() {
@@ -33,7 +31,7 @@ func (sim *simulator) Simulate() {
 			break
 		}
 		for _, alien := range sim.worldMap.GetAliens() {
-			sim.worldMap.MoveAlien(alien, sim.rand)
+			sim.worldMap.MoveAlien(alien, sim.rng)
 		}
 		sim.fightAliens()
 	}
@@ -76,7 +74,7 @@ func (sim *simulator) getRandomName() string {
 	const nameLength = 8
 	name := ""
 	for i := 0; i < nameLength; i++ {
-		name += string(rune('a' + sim.rand.Intn(26)))
+		name += string(rune('a' + sim.rng.Intn(26)))
 	}
 	return name
 }
@@ -92,5 +90,5 @@ func (sim *simulator) getRandomCity() string {
 	for k := range sim.worldMap.GetCities() {
 		keys = append(keys, k)
 	}
-	return keys[sim.rand.Intn(len(keys))]
+	return keys[sim.rng.Intn(len(keys))]
 }

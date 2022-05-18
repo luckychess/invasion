@@ -2,8 +2,10 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/luckychess/invasion/simulator"
 	"github.com/luckychess/invasion/world"
@@ -15,7 +17,8 @@ func main() {
 	totalAliens := 2
 	lines := readFile("input.txt")
 	worldMap := parseInput(lines)
-	simulator := simulator.InitSimulation(worldMap, uint32(totalAliens))
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	simulator := simulator.InitSimulation(worldMap, rng, uint32(totalAliens))
 	simulator.Simulate()
 	simulator.StopSimulation()
 }

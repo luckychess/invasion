@@ -1,6 +1,7 @@
 package simulator
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -16,7 +17,7 @@ func TestInit(t *testing.T) {
 		"dude": {Name: "dude", City: "Somewhere"},
 	}
 	mockWorld.EXPECT().GetAliens().Return(testAliens).Times(2)
-	simulator := InitSimulation(mockWorld, 123)
+	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 123)
 	assert.Assert(t, simulator.worldMap != nil)
 	assert.Assert(t, simulator.aliensCount == 123)
 	assert.Assert(t, simulator.worldMap.GetAliens()["dude"].Name == "dude")
