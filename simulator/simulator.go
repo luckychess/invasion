@@ -63,10 +63,14 @@ func (sim *simulator) fightAliens() {
 func (sim *simulator) unleashAliens() {
 	for i := 0; i < int(sim.aliensCount); i++ {
 		name := sim.getRandomName()
-		city := sim.getRandomCity()
-		log.Printf("Unleashing alien %s into city %s", name, city)
-		alien := world.Alien{Name: name, City: city}
-		sim.worldMap.AddAlien(&alien)
+		city, err := sim.getRandomCity()
+		if err == nil {
+			log.Printf("Unleashing alien %s into city %s", name, city)
+			alien := world.Alien{Name: name, City: city}
+			sim.worldMap.AddAlien(&alien)
+		} else {
+			log.Println(err)
+		}
 	}
 }
 
@@ -79,16 +83,19 @@ func (sim *simulator) getRandomName() string {
 	return name
 }
 
-func (sim *simulator) getRandomCity() string {
+func (sim *simulator) getRandomCity() (string, error) {
 	// pretty inefficient O(n) implementation
 	// unfortunately there is no easy way to get a random element
 	// of map in Golang
 	// O(1) is possible but more complicated
 	// e.g. requires creating and maintaining
 	// a separate slice with keys
+	if len(sim.worldMap.GetCities()) == 0 {
+		return "", fmt.Errorf("there are no cities in the world")
+	}
 	keys := make([]string, 0, len(sim.worldMap.GetCities()))
 	for k := range sim.worldMap.GetCities() {
 		keys = append(keys, k)
 	}
-	return keys[sim.rng.Intn(len(keys))]
+	return keys[sim.rng.Intn(len(keys))], nil
 }
