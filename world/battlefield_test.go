@@ -139,6 +139,56 @@ func TestDestroyCity(t *testing.T) {
 	assert.Assert(t, wm.Cities[cities[0]].north == nil)
 }
 
+func TestGetDirections(t *testing.T) {
+	// it's not necessary to create a WorldMap instance here but it's easier to test this way
+	wm := InitWorldMap()
+	wm.AddCity("Hannover", "Berlin", "Hamburg", "Cologne", "Mainz")
+	hannoverDirections := wm.Cities["Hannover"].GetDirections()
+	assert.Assert(t, len(hannoverDirections) == 4)
+	assert.Assert(t, hannoverDirections[0] == "east")
+	assert.Assert(t, hannoverDirections[1] == "north")
+	assert.Assert(t, hannoverDirections[2] == "west")
+	assert.Assert(t, hannoverDirections[3] == "south")
+	hamburgDirections := wm.Cities["Hamburg"].GetDirections()
+	assert.Assert(t, len(hamburgDirections) == 1)
+	assert.Assert(t, hamburgDirections[0] == "south")
+}
+
+func TestGetNeighbour(t *testing.T) {
+	city := City{name: "Geneva", aliens: make(map[string]bool)}
+	// east direction
+	_, err := city.GetNeighbour("east")
+	assert.Error(t, err, "no cities in east direction")
+	eastCity := &City{name: "Milan", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
+	city.east = eastCity
+	milan, _ := city.GetNeighbour("east")
+	assert.Assert(t, milan == eastCity.name)
+	// north direction
+	_, err = city.GetNeighbour("north")
+	assert.Error(t, err, "no cities in north direction")
+	northCity := &City{name: "Bern", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
+	city.north = northCity
+	bern, _ := city.GetNeighbour("north")
+	assert.Assert(t, bern == northCity.name)
+	// west direction
+	_, err = city.GetNeighbour("west")
+	assert.Error(t, err, "no cities in west direction")
+	westCity := &City{name: "Lyon", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
+	city.west = westCity
+	lyon, _ := city.GetNeighbour("west")
+	assert.Assert(t, lyon == westCity.name)
+	// south direction
+	_, err = city.GetNeighbour("south")
+	assert.Error(t, err, "no cities in south direction")
+	southCity := &City{name: "Marseille", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
+	city.south = southCity
+	marseille, _ := city.GetNeighbour("south")
+	assert.Assert(t, marseille == southCity.name)
+
+	_, err = city.GetNeighbour("wrong")
+	assert.Error(t, err, "wrong direction wrong")
+}
+
 func createSimpleMap() *WorldMap {
 	// the map how it's supposed to look like (check first letters; *slightly* different to the real life)
 	/*
