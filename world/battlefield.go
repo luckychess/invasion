@@ -37,20 +37,28 @@ func (c *City) GetDirections() []string {
 	return directions
 }
 
-func (c *City) GetNeighbour(direction string) string {
+func (c *City) GetNeighbour(direction string) (string, error) {
 	switch direction {
 	case "east":
-		return c.east.name
+		if c.east != nil {
+			return c.east.name, nil
+		}
 	case "north":
-		return c.north.name
+		if c.north != nil {
+			return c.north.name, nil
+		}
 	case "west":
-		return c.west.name
+		if c.west != nil {
+			return c.west.name, nil
+		}
 	case "south":
-		return c.south.name
+		if c.south != nil {
+			return c.south.name, nil
+		}
 	default:
-		log.Fatalf("Wrong direction %s\n", direction)
-		return ""
+		return "", fmt.Errorf("wrong direction %s", direction)
 	}
+	return "", fmt.Errorf("no cities in %s direction", direction)
 }
 
 type WorldMap struct {
@@ -121,9 +129,14 @@ func (m *WorldMap) MoveAlien(alien *Alien, rng *rand.Rand) {
 	directions := city.GetDirections()
 	if len(directions) > 0 {
 		direction := directions[rng.Intn(len(directions))]
-		alien.City = city.GetNeighbour(direction)
-		delete(city.aliens, alien.Name)
-		m.Cities[alien.City].aliens[alien.Name] = true
+		newCity, err := city.GetNeighbour(direction)
+		if err == nil {
+			alien.City = newCity
+			delete(city.aliens, alien.Name)
+			m.Cities[alien.City].aliens[alien.Name] = true
+		} else {
+			log.Println(err)
+		}
 	}
 }
 

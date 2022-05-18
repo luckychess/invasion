@@ -45,9 +45,11 @@ func (sim *simulator) StopSimulation() {
 		cityOutput := fmt.Sprintf("%s ", name)
 		directions := city.GetDirections()
 		for _, dir := range directions {
-			neighbour := city.GetNeighbour(dir)
-			if neighbour != "" {
+			neighbour, err := city.GetNeighbour(dir)
+			if err == nil {
 				cityOutput += fmt.Sprintf("%s=%s ", dir, neighbour)
+			} else {
+				log.Println(err)
 			}
 		}
 		log.Print(cityOutput)
