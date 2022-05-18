@@ -66,7 +66,7 @@ func (sim *simulator) unleashAliens() {
 	for i := 0; i < int(sim.aliensCount); i++ {
 		name := sim.getRandomName()
 		city := sim.getRandomCity()
-		log.Printf("Unleashing alien %s into city %s\n", name, city)
+		log.Printf("Unleashing alien %s into city %s", name, city)
 		alien := world.Alien{Name: name, City: city}
 		sim.worldMap.AddAlien(&alien)
 	}

@@ -27,11 +27,11 @@ func readFile(fileName string) []string {
 	// expect lines are separated with \n newline separator
 	inputBytes, err := os.ReadFile(fileName)
 	if err != nil {
-		log.Fatalf("Error happened when trying to read file %s: %s\n", fileName, err)
+		log.Fatalf("Error happened when trying to read file %s: %s", fileName, err)
 	}
 	inputLines := strings.Split(string(inputBytes), "\n")
 	for i, line := range inputLines {
-		log.Printf("Line %d: %s\n", i, line)
+		log.Printf("Line %d: %s", i, line)
 	}
 	return inputLines
 }
@@ -55,7 +55,7 @@ func parseInput(lines []string) world.WorldMap {
 		for i := 1; i < len(words); i++ {
 			road := strings.Split(words[i], "=")
 			if len(road) != 2 {
-				log.Fatalf("Error parsing input data: expected city1=city2 format but got %s\n", words[i])
+				log.Fatalf("Error parsing input data: expected city1=city2 format but got %s", words[i])
 			}
 			direction, city := road[0], road[1]
 			switch direction {
@@ -68,7 +68,7 @@ func parseInput(lines []string) world.WorldMap {
 			case "south":
 				south = city
 			default:
-				log.Fatalf("Error parsing input data: wrong direction %s\n", direction)
+				log.Fatalf("Error parsing input data: wrong direction %s", direction)
 			}
 
 		}

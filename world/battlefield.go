@@ -163,7 +163,7 @@ func (m *WorldMap) DestroyCity(cityToDestroy string) {
 		for alien := range city.aliens {
 			aliens += alien + " "
 		}
-		log.Printf("%s has been destroyed by aliens %s\n", cityToDestroy, aliens)
+		log.Printf("%s has been destroyed by aliens %s", cityToDestroy, aliens)
 		city.aliens = nil
 	}
 }
