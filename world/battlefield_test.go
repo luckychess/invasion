@@ -1,6 +1,7 @@
 package world
 
 import (
+	"math/rand"
 	"testing"
 
 	"gotest.tools/assert"
@@ -100,6 +101,24 @@ func TestAddAlien(t *testing.T) {
 
 	// Expect non-zero error when attempt to invade non-existing city
 	assert.Assert(t, wm.AddAlien(&Alien{Name: "Not very clever", City: "Moscow"}) != nil)
+}
+
+func TestMoveAlien(t *testing.T) {
+	// Initialize rng with seed=0 to make tests more predictable
+	rng := rand.New(rand.NewSource(0))
+	firstCity := "Prague"
+	secondCity := "Amsterdam"
+	wm := InitWorldMap()
+	wm.AddCity(firstCity, "", "", "", "")
+	alien := &Alien{Name: "Lazy cat", City: firstCity}
+	wm.AddAlien(alien)
+	// Trying to move alien but there are no cities to move to
+	wm.MoveAlien(alien, rng)
+	assert.Assert(t, alien.City == firstCity)
+	// Now add another city connected with Prague
+	wm.AddCity(secondCity, firstCity, "", "", "")
+	// Now alien should be in Amsterdam
+	wm.MoveAlien(alien, rng)
 }
 
 func TestDestroyCity(t *testing.T) {
