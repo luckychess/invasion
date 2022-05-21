@@ -2,6 +2,7 @@ package simulator
 
 import (
 	"math/rand"
+	"strings"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -62,7 +63,7 @@ func TestSimulateTwoAliensOneCity(t *testing.T) {
 }
 
 func TestSimulateThreeAliensThreeCities(t *testing.T) {
-	// 3 aliens, 3 cities, 10 rounds, nothing happens
+	// 3 aliens, 3 cities, 10 rounds, nothing happen
 	ctrl := gomock.NewController(t)
 	mockWorld := mock_world.NewMockWorldMap(ctrl)
 	A := world.City{Name: "A"}
@@ -90,4 +91,28 @@ func TestSimulateThreeAliensThreeCities(t *testing.T) {
 	mockWorld.EXPECT().DestroyCity(gomock.Any()).Times(3 + 3*10)
 	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 3)
 	simulator.Simulate()
+}
+
+func TestStopSimulation(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockWorld := mock_world.NewMockWorldMap(ctrl)
+	A := world.City{Name: "A"}
+	B := world.City{Name: "B"}
+	C := world.City{Name: "C"}
+	A.East = &B
+	B.West = &A
+	B.East = &C
+	C.West = &B
+	testCities := map[string]*world.City{
+		"A": &A,
+		"B": &B,
+		"C": &C,
+	}
+	mockWorld.EXPECT().GetCities().Times(1).Return(testCities)
+	// StopSimulation doesn't require previous calls to StartSimulation
+	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 1)
+	result := simulator.StopSimulation()
+	assert.Assert(t, strings.Contains(result, "A east=B"))
+	assert.Assert(t, strings.Contains(result, "B east=C west=A"))
+	assert.Assert(t, strings.Contains(result, "C west=B"))
 }

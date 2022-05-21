@@ -37,8 +37,9 @@ func (sim *simulator) Simulate() {
 	}
 }
 
-func (sim *simulator) StopSimulation() {
-	log.Println("=== Simulation finished ===")
+func (sim *simulator) StopSimulation() string {
+	result := ""
+	result += "=== Simulation finished ===\n"
 	for name, city := range sim.worldMap.GetCities() {
 		cityOutput := fmt.Sprintf("%s ", name)
 		directions := city.GetDirections()
@@ -47,11 +48,12 @@ func (sim *simulator) StopSimulation() {
 			if err == nil {
 				cityOutput += fmt.Sprintf("%s=%s ", dir, neighbour)
 			} else {
-				log.Println(err)
+				result += err.Error() + "\n"
 			}
 		}
-		log.Print(cityOutput)
+		result += cityOutput + "\n"
 	}
+	return result
 }
 
 func (sim *simulator) fightAliens() {

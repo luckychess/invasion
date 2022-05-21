@@ -20,7 +20,8 @@ func main() {
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	simulator := simulator.InitSimulation(worldMap, rng, uint32(totalAliens))
 	simulator.Simulate()
-	simulator.StopSimulation()
+	simulationResult := simulator.StopSimulation()
+	log.Print(simulationResult)
 }
 
 func readFile(fileName string) []string {
