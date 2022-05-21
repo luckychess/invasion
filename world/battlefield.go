@@ -91,45 +91,48 @@ func (m *worldMapImpl) GetAliens() map[string]*Alien {
 }
 
 func (m *worldMapImpl) AddCity(name string, east string, north string, west string, south string) {
-	city := City{Name: name, Aliens: make(map[string]bool)}
+	city := &City{Name: name, Aliens: make(map[string]bool)}
+	if m.Cities[name] != nil {
+		city = m.Cities[name]
+	}
 	if east != "" {
 		eastCity := m.Cities[east]
 		if eastCity == nil {
-			eastCity = &City{Name: east, East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
+			eastCity = &City{Name: east, East: nil, North: nil, West: city, South: nil, Aliens: make(map[string]bool)}
 		}
 		city.East = eastCity
-		eastCity.West = &city
+		eastCity.West = city
 		m.Cities[east] = eastCity
 	}
 	if north != "" {
 		northCity := m.Cities[north]
 		if northCity == nil {
-			northCity = &City{Name: north, East: nil, North: nil, West: nil, South: &city, Aliens: make(map[string]bool)}
+			northCity = &City{Name: north, East: nil, North: nil, West: nil, South: city, Aliens: make(map[string]bool)}
 		}
 		city.North = northCity
-		northCity.South = &city
+		northCity.South = city
 		m.Cities[north] = northCity
 	}
 	if west != "" {
 		westCity := m.Cities[west]
 		if westCity == nil {
-			westCity = &City{Name: west, East: &city, North: nil, West: nil, South: nil, Aliens: make(map[string]bool)}
+			westCity = &City{Name: west, East: city, North: nil, West: nil, South: nil, Aliens: make(map[string]bool)}
 		}
 		city.West = westCity
-		westCity.East = &city
+		westCity.East = city
 		m.Cities[west] = westCity
 	}
 	if south != "" {
 		southCity := m.Cities[south]
 		if southCity == nil {
-			southCity = &City{Name: south, East: nil, North: &city, West: nil, South: nil, Aliens: make(map[string]bool)}
+			southCity = &City{Name: south, East: nil, North: city, West: nil, South: nil, Aliens: make(map[string]bool)}
 		}
 		city.South = southCity
-		southCity.North = &city
+		southCity.North = city
 		m.Cities[south] = southCity
 	}
 
-	m.Cities[name] = &city
+	m.Cities[name] = city
 }
 
 func (m *worldMapImpl) AddAlien(alien *Alien) error {

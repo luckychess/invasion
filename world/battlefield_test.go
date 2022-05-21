@@ -91,6 +91,14 @@ func TestMultipleCitiesMap(t *testing.T) {
 	assert.Assert(t, wm.GetCities()[cities[8]].South.Name == cities[7])
 }
 
+func TestAddCityAssymetric(t *testing.T) {
+	wm := InitWorldMap()
+	wm.AddCity("Frankfurt", "", "", "", "Heidelberg")
+	wm.AddCity("Heidelberg", "", "", "", "")
+	assert.Assert(t, wm.GetCities()["Frankfurt"].South.Name == "Heidelberg")
+	assert.Assert(t, wm.GetCities()["Heidelberg"].North.Name == "Frankfurt")
+}
+
 func TestAddAlien(t *testing.T) {
 	wm := InitWorldMap()
 	wm.AddCity("Zurich", "", "Frankfurt", "", "Milan")
