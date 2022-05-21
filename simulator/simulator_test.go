@@ -40,7 +40,7 @@ func TestSimulateOneAlien(t *testing.T) {
 	mockWorld.EXPECT().MoveAlien(aliens["Honey"], gomock.Any()).Times(10)
 	// (1 call + 1 call for every alien) * number of simulation steps
 	mockWorld.EXPECT().GetAliens().Times((1 + 1) * 10).Return(aliens)
-	mockWorld.EXPECT().DestroyCity("Dubai").Times(int(10))
+	mockWorld.EXPECT().DestroyCity("Dubai").Times(int(1 + 10))
 	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 1)
 	simulator.Simulate()
 }

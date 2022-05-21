@@ -72,6 +72,7 @@ func (sim *simulator) unleashAliens() {
 			log.Println(err)
 		}
 	}
+	sim.fightAliens()
 }
 
 func (sim *simulator) getRandomName() string {
