@@ -45,8 +45,8 @@ func TestSimulateOneAlien(t *testing.T) {
 	simulator.Simulate()
 }
 
-func TestSimulateTwoAliens(t *testing.T) {
-	// two aliens, one city, city is instantly destroyed
+func TestSimulateTwoAliensOneCity(t *testing.T) {
+	// 2 aliens, 1 city, city is instantly destroyed
 	ctrl := gomock.NewController(t)
 	mockWorld := mock_world.NewMockWorldMap(ctrl)
 	testCities := map[string]*world.City{
@@ -58,5 +58,36 @@ func TestSimulateTwoAliens(t *testing.T) {
 	destroyMock := mockWorld.EXPECT().DestroyCity("Uglich").Times(1)
 	mockWorld.EXPECT().GetAliens().AnyTimes().After(destroyMock).Return(nil)
 	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 2)
+	simulator.Simulate()
+}
+
+func TestSimulateThreeAliensThreeCities(t *testing.T) {
+	// 3 aliens, 3 cities, 10 rounds, nothing happens
+	ctrl := gomock.NewController(t)
+	mockWorld := mock_world.NewMockWorldMap(ctrl)
+	A := world.City{Name: "A"}
+	B := world.City{Name: "B"}
+	C := world.City{Name: "C"}
+	A.East = &B
+	B.West = &A
+	B.East = &C
+	C.West = &B
+	testCities := map[string]*world.City{
+		"A": &A,
+		"B": &B,
+		"C": &C,
+	}
+	aliens := map[string]*world.Alien{
+		"DudeA": {Name: "DudeA", City: "A"},
+		"DudeB": {Name: "DudeB", City: "B"},
+		"DudeC": {Name: "DudeC", City: "C"},
+	}
+
+	mockWorld.EXPECT().GetCities().Times(3*3 + 1 + 10).Return(testCities)
+	mockWorld.EXPECT().AddAlien(gomock.Any()).Times(3)
+	mockWorld.EXPECT().GetAliens().Times(2 * 10).Return(aliens)
+	mockWorld.EXPECT().MoveAlien(gomock.Any(), gomock.Any()).Times(3 * 10)
+	mockWorld.EXPECT().DestroyCity(gomock.Any()).Times(3 + 3*10)
+	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 3)
 	simulator.Simulate()
 }
