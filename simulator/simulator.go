@@ -19,10 +19,19 @@ type simulator struct {
 	aliensCount uint32
 }
 
+// InitSimulation creates an empty world map from given parameters.
 func InitSimulation(worldMap world.WorldMap, rng *rand.Rand, aliens uint32) simulator {
 	return simulator{worldMap: worldMap, rng: rng, stepsCount: simulatorSteps, aliensCount: aliens}
 }
 
+// Simulate performs the invasion simulation. At the beginning it creates and randomly spreads
+// aliens along the world map. This follows by a fight check: if there are 2 or more aliens
+// in the same city, this city is destroyed together with all the aliens in it.
+// Then for the given amount of simulation steps (currently hardcoded to 10000)
+// Simulate moves each alien in a random direction and performs a new fight check
+// AFTER all aliens have moved. This means that during the simulation step it's possible to
+// exist more than one alien in the same city without the fight if at the end of the simulation step
+// less than 2 aliens remain in the city.
 func (sim *simulator) Simulate() {
 	sim.unleashAliens()
 	for i := 0; i < int(sim.stepsCount); i++ {
@@ -37,6 +46,7 @@ func (sim *simulator) Simulate() {
 	}
 }
 
+// StopSimulation returns status of the world in the same format as input data.
 func (sim *simulator) StopSimulation() string {
 	result := ""
 	result += "=== Simulation finished ===\n"

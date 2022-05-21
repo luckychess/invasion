@@ -6,11 +6,14 @@ import (
 	"math/rand"
 )
 
+// Alien structure contains name and current city name of alien.
 type Alien struct {
 	Name string
 	City string
 }
 
+// City contains name of the city and pointers to cities in other directions.
+// It also contains all aliens currently in the city.
 type City struct {
 	Name   string
 	East   *City
@@ -20,6 +23,8 @@ type City struct {
 	Aliens map[string]bool
 }
 
+// GetDirections is a helper function which returns a slice of
+// possible directions to go from the city.
 func (c *City) GetDirections() []string {
 	directions := make([]string, 0)
 	if c.East != nil {
@@ -37,6 +42,8 @@ func (c *City) GetDirections() []string {
 	return directions
 }
 
+// GetNeighbour returns name of the city in given direction or error
+// if no city in this direction exists.
 func (c *City) GetNeighbour(direction string) (string, error) {
 	switch direction {
 	case "east":
@@ -61,12 +68,22 @@ func (c *City) GetNeighbour(direction string) (string, error) {
 	return "", fmt.Errorf("no cities in %s direction", direction)
 }
 
+// WorldMap interface describes actions available for the world.
 type WorldMap interface {
+	// GetCities returns all cities in the world.
 	GetCities() map[string]*City
+	// GetCities returns all aliens in the world.
 	GetAliens() map[string]*Alien
+	// AddCity adds a new city to the world and also creates or updates information
+	// about neighbours of the given city.
 	AddCity(name string, east string, north string, west string, south string)
+	// AddAlien adds alien into the world.
 	AddAlien(alien *Alien) error
+	// MoveAlien moves given alien in a random direction
+	// if there are directions to move.
 	MoveAlien(alien *Alien, rng *rand.Rand)
+	// Destroy city deletes city and all aliens in it if there are 2 or
+	// more aliens in the city.
 	DestroyCity(cityToDestroy string)
 }
 
@@ -75,6 +92,7 @@ type worldMapImpl struct {
 	Aliens map[string]*Alien
 }
 
+// InitWorldMap creates an empty world map with no cities and aliens.
 func InitWorldMap() WorldMap {
 	worldMap := worldMapImpl{}
 	worldMap.Cities = make(map[string]*City)
