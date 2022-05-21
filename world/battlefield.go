@@ -12,26 +12,26 @@ type Alien struct {
 }
 
 type City struct {
-	name   string
-	east   *City
-	north  *City
-	west   *City
-	south  *City
-	aliens map[string]bool
+	Name   string
+	East   *City
+	North  *City
+	West   *City
+	South  *City
+	Aliens map[string]bool
 }
 
 func (c *City) GetDirections() []string {
 	directions := make([]string, 0)
-	if c.east != nil {
+	if c.East != nil {
 		directions = append(directions, "east")
 	}
-	if c.north != nil {
+	if c.North != nil {
 		directions = append(directions, "north")
 	}
-	if c.west != nil {
+	if c.West != nil {
 		directions = append(directions, "west")
 	}
-	if c.south != nil {
+	if c.South != nil {
 		directions = append(directions, "south")
 	}
 	return directions
@@ -40,20 +40,20 @@ func (c *City) GetDirections() []string {
 func (c *City) GetNeighbour(direction string) (string, error) {
 	switch direction {
 	case "east":
-		if c.east != nil {
-			return c.east.name, nil
+		if c.East != nil {
+			return c.East.Name, nil
 		}
 	case "north":
-		if c.north != nil {
-			return c.north.name, nil
+		if c.North != nil {
+			return c.North.Name, nil
 		}
 	case "west":
-		if c.west != nil {
-			return c.west.name, nil
+		if c.West != nil {
+			return c.West.Name, nil
 		}
 	case "south":
-		if c.south != nil {
-			return c.south.name, nil
+		if c.South != nil {
+			return c.South.Name, nil
 		}
 	default:
 		return "", fmt.Errorf("wrong direction %s", direction)
@@ -91,41 +91,41 @@ func (m *worldMapImpl) GetAliens() map[string]*Alien {
 }
 
 func (m *worldMapImpl) AddCity(name string, east string, north string, west string, south string) {
-	city := City{name: name, aliens: make(map[string]bool)}
+	city := City{Name: name, Aliens: make(map[string]bool)}
 	if east != "" {
 		eastCity := m.Cities[east]
 		if eastCity == nil {
-			eastCity = &City{name: east, east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
+			eastCity = &City{Name: east, East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
 		}
-		city.east = eastCity
-		eastCity.west = &city
+		city.East = eastCity
+		eastCity.West = &city
 		m.Cities[east] = eastCity
 	}
 	if north != "" {
 		northCity := m.Cities[north]
 		if northCity == nil {
-			northCity = &City{name: north, east: nil, north: nil, west: nil, south: &city, aliens: make(map[string]bool)}
+			northCity = &City{Name: north, East: nil, North: nil, West: nil, South: &city, Aliens: make(map[string]bool)}
 		}
-		city.north = northCity
-		northCity.south = &city
+		city.North = northCity
+		northCity.South = &city
 		m.Cities[north] = northCity
 	}
 	if west != "" {
 		westCity := m.Cities[west]
 		if westCity == nil {
-			westCity = &City{name: west, east: &city, north: nil, west: nil, south: nil, aliens: make(map[string]bool)}
+			westCity = &City{Name: west, East: &city, North: nil, West: nil, South: nil, Aliens: make(map[string]bool)}
 		}
-		city.west = westCity
-		westCity.east = &city
+		city.West = westCity
+		westCity.East = &city
 		m.Cities[west] = westCity
 	}
 	if south != "" {
 		southCity := m.Cities[south]
 		if southCity == nil {
-			southCity = &City{name: south, east: nil, north: &city, west: nil, south: nil, aliens: make(map[string]bool)}
+			southCity = &City{Name: south, East: nil, North: &city, West: nil, South: nil, Aliens: make(map[string]bool)}
 		}
-		city.south = southCity
-		southCity.north = &city
+		city.South = southCity
+		southCity.North = &city
 		m.Cities[south] = southCity
 	}
 
@@ -137,7 +137,7 @@ func (m *worldMapImpl) AddAlien(alien *Alien) error {
 		return (fmt.Errorf("trying to unleash an alien %s into non-existing city %s", alien.Name, alien.City))
 	}
 	m.Aliens[alien.Name] = alien
-	m.Cities[alien.City].aliens[alien.Name] = true
+	m.Cities[alien.City].Aliens[alien.Name] = true
 	return nil
 }
 
@@ -149,8 +149,8 @@ func (m *worldMapImpl) MoveAlien(alien *Alien, rng *rand.Rand) {
 		newCity, err := city.GetNeighbour(direction)
 		if err == nil {
 			alien.City = newCity
-			delete(city.aliens, alien.Name)
-			m.Cities[alien.City].aliens[alien.Name] = true
+			delete(city.Aliens, alien.Name)
+			m.Cities[alien.City].Aliens[alien.Name] = true
 		} else {
 			log.Println(err)
 		}
@@ -159,28 +159,28 @@ func (m *worldMapImpl) MoveAlien(alien *Alien, rng *rand.Rand) {
 
 func (m *worldMapImpl) DestroyCity(cityToDestroy string) {
 	city := m.Cities[cityToDestroy]
-	if len(city.aliens) > 1 {
-		if city.east != nil {
-			city.east.west = nil
+	if len(city.Aliens) > 1 {
+		if city.East != nil {
+			city.East.West = nil
 		}
-		if city.north != nil {
-			city.north.south = nil
+		if city.North != nil {
+			city.North.South = nil
 		}
-		if city.west != nil {
-			city.west.east = nil
+		if city.West != nil {
+			city.West.East = nil
 		}
-		if city.south != nil {
-			city.south.north = nil
+		if city.South != nil {
+			city.South.North = nil
 		}
-		delete(m.Cities, city.name)
-		for alien := range city.aliens {
+		delete(m.Cities, city.Name)
+		for alien := range city.Aliens {
 			delete(m.Aliens, alien)
 		}
 		aliens := ""
-		for alien := range city.aliens {
+		for alien := range city.Aliens {
 			aliens += alien + " "
 		}
 		log.Printf("%s has been destroyed by aliens %s", cityToDestroy, aliens)
-		city.aliens = nil
+		city.Aliens = nil
 	}
 }

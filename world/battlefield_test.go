@@ -25,11 +25,11 @@ func TestSingleCityMap(t *testing.T) {
 	assert.Assert(t, len(wm.GetAliens()) == 0)
 	// still the same city without neighbours
 	city := wm.GetCities()[name]
-	assert.Assert(t, city.name == name)
-	assert.Assert(t, city.east == nil)
-	assert.Assert(t, city.north == nil)
-	assert.Assert(t, city.west == nil)
-	assert.Assert(t, city.south == nil)
+	assert.Assert(t, city.Name == name)
+	assert.Assert(t, city.East == nil)
+	assert.Assert(t, city.North == nil)
+	assert.Assert(t, city.West == nil)
+	assert.Assert(t, city.South == nil)
 }
 
 func TestMultipleCitiesMap(t *testing.T) {
@@ -37,58 +37,58 @@ func TestMultipleCitiesMap(t *testing.T) {
 	wm := createSimpleMap()
 	// now let's check that all the cities are saved according to the scheme above
 	// Berlin
-	assert.Assert(t, wm.GetCities()[cities[4]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[4]].north == nil)
-	assert.Assert(t, wm.GetCities()[cities[4]].west.name == cities[1])
-	assert.Assert(t, wm.GetCities()[cities[4]].south == nil)
+	assert.Assert(t, wm.GetCities()[cities[4]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[4]].North == nil)
+	assert.Assert(t, wm.GetCities()[cities[4]].West.Name == cities[1])
+	assert.Assert(t, wm.GetCities()[cities[4]].South == nil)
 
 	// Cologne
-	assert.Assert(t, wm.GetCities()[cities[1]].east.name == cities[4])
-	assert.Assert(t, wm.GetCities()[cities[1]].north == nil)
-	assert.Assert(t, wm.GetCities()[cities[1]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[1]].south.name == cities[2])
+	assert.Assert(t, wm.GetCities()[cities[1]].East.Name == cities[4])
+	assert.Assert(t, wm.GetCities()[cities[1]].North == nil)
+	assert.Assert(t, wm.GetCities()[cities[1]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[1]].South.Name == cities[2])
 
 	// Frankfurt
-	assert.Assert(t, wm.GetCities()[cities[2]].east.name == cities[6])
-	assert.Assert(t, wm.GetCities()[cities[2]].north.name == cities[1])
-	assert.Assert(t, wm.GetCities()[cities[2]].west.name == cities[5])
-	assert.Assert(t, wm.GetCities()[cities[2]].south.name == cities[0])
+	assert.Assert(t, wm.GetCities()[cities[2]].East.Name == cities[6])
+	assert.Assert(t, wm.GetCities()[cities[2]].North.Name == cities[1])
+	assert.Assert(t, wm.GetCities()[cities[2]].West.Name == cities[5])
+	assert.Assert(t, wm.GetCities()[cities[2]].South.Name == cities[0])
 
 	// Strasbourg
-	assert.Assert(t, wm.GetCities()[cities[5]].east.name == cities[2])
-	assert.Assert(t, wm.GetCities()[cities[5]].north == nil)
-	assert.Assert(t, wm.GetCities()[cities[5]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[5]].south == nil)
+	assert.Assert(t, wm.GetCities()[cities[5]].East.Name == cities[2])
+	assert.Assert(t, wm.GetCities()[cities[5]].North == nil)
+	assert.Assert(t, wm.GetCities()[cities[5]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[5]].South == nil)
 
 	// Nuremberg
-	assert.Assert(t, wm.GetCities()[cities[6]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[6]].north == nil)
-	assert.Assert(t, wm.GetCities()[cities[6]].west.name == cities[2])
-	assert.Assert(t, wm.GetCities()[cities[6]].south.name == cities[3])
+	assert.Assert(t, wm.GetCities()[cities[6]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[6]].North == nil)
+	assert.Assert(t, wm.GetCities()[cities[6]].West.Name == cities[2])
+	assert.Assert(t, wm.GetCities()[cities[6]].South.Name == cities[3])
 
 	// Heidelberg
-	assert.Assert(t, wm.GetCities()[cities[0]].east.name == cities[3])
-	assert.Assert(t, wm.GetCities()[cities[0]].north.name == cities[2])
-	assert.Assert(t, wm.GetCities()[cities[0]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[0]].south == nil)
+	assert.Assert(t, wm.GetCities()[cities[0]].East.Name == cities[3])
+	assert.Assert(t, wm.GetCities()[cities[0]].North.Name == cities[2])
+	assert.Assert(t, wm.GetCities()[cities[0]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[0]].South == nil)
 
 	// Munich
-	assert.Assert(t, wm.GetCities()[cities[3]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[3]].north.name == cities[6])
-	assert.Assert(t, wm.GetCities()[cities[3]].west.name == cities[0])
-	assert.Assert(t, wm.GetCities()[cities[3]].south == nil)
+	assert.Assert(t, wm.GetCities()[cities[3]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[3]].North.Name == cities[6])
+	assert.Assert(t, wm.GetCities()[cities[3]].West.Name == cities[0])
+	assert.Assert(t, wm.GetCities()[cities[3]].South == nil)
 
 	// Regensburg
-	assert.Assert(t, wm.GetCities()[cities[7]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[7]].north.name == cities[8])
-	assert.Assert(t, wm.GetCities()[cities[7]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[7]].south == nil)
+	assert.Assert(t, wm.GetCities()[cities[7]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[7]].North.Name == cities[8])
+	assert.Assert(t, wm.GetCities()[cities[7]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[7]].South == nil)
 
 	// Leipzig
-	assert.Assert(t, wm.GetCities()[cities[8]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[8]].north == nil)
-	assert.Assert(t, wm.GetCities()[cities[8]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[8]].south.name == cities[7])
+	assert.Assert(t, wm.GetCities()[cities[8]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[8]].North == nil)
+	assert.Assert(t, wm.GetCities()[cities[8]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[8]].South.Name == cities[7])
 }
 
 func TestAddAlien(t *testing.T) {
@@ -133,10 +133,10 @@ func TestDestroyCity(t *testing.T) {
 	assert.Assert(t, wm.GetAliens()[alien2.Name] == nil)
 	assert.Assert(t, wm.GetCities()[alien1.Name] == nil)
 	// Frankfurt connections are also destroyed now
-	assert.Assert(t, wm.GetCities()[cities[6]].west == nil)
-	assert.Assert(t, wm.GetCities()[cities[1]].south == nil)
-	assert.Assert(t, wm.GetCities()[cities[5]].east == nil)
-	assert.Assert(t, wm.GetCities()[cities[0]].north == nil)
+	assert.Assert(t, wm.GetCities()[cities[6]].West == nil)
+	assert.Assert(t, wm.GetCities()[cities[1]].South == nil)
+	assert.Assert(t, wm.GetCities()[cities[5]].East == nil)
+	assert.Assert(t, wm.GetCities()[cities[0]].North == nil)
 }
 
 func TestGetDirections(t *testing.T) {
@@ -155,35 +155,35 @@ func TestGetDirections(t *testing.T) {
 }
 
 func TestGetNeighbour(t *testing.T) {
-	city := City{name: "Geneva", aliens: make(map[string]bool)}
+	city := City{Name: "Geneva", Aliens: make(map[string]bool)}
 	// east direction
 	_, err := city.GetNeighbour("east")
 	assert.Error(t, err, "no cities in east direction")
-	eastCity := &City{name: "Milan", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
-	city.east = eastCity
+	eastCity := &City{Name: "Milan", East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
+	city.East = eastCity
 	milan, _ := city.GetNeighbour("east")
-	assert.Assert(t, milan == eastCity.name)
+	assert.Assert(t, milan == eastCity.Name)
 	// north direction
 	_, err = city.GetNeighbour("north")
 	assert.Error(t, err, "no cities in north direction")
-	northCity := &City{name: "Bern", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
-	city.north = northCity
+	northCity := &City{Name: "Bern", East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
+	city.North = northCity
 	bern, _ := city.GetNeighbour("north")
-	assert.Assert(t, bern == northCity.name)
+	assert.Assert(t, bern == northCity.Name)
 	// west direction
 	_, err = city.GetNeighbour("west")
 	assert.Error(t, err, "no cities in west direction")
-	westCity := &City{name: "Lyon", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
-	city.west = westCity
+	westCity := &City{Name: "Lyon", East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
+	city.West = westCity
 	lyon, _ := city.GetNeighbour("west")
-	assert.Assert(t, lyon == westCity.name)
+	assert.Assert(t, lyon == westCity.Name)
 	// south direction
 	_, err = city.GetNeighbour("south")
 	assert.Error(t, err, "no cities in south direction")
-	southCity := &City{name: "Marseille", east: nil, north: nil, west: &city, south: nil, aliens: make(map[string]bool)}
-	city.south = southCity
+	southCity := &City{Name: "Marseille", East: nil, North: nil, West: &city, South: nil, Aliens: make(map[string]bool)}
+	city.South = southCity
 	marseille, _ := city.GetNeighbour("south")
-	assert.Assert(t, marseille == southCity.name)
+	assert.Assert(t, marseille == southCity.Name)
 
 	_, err = city.GetNeighbour("wrong")
 	assert.Error(t, err, "wrong direction wrong")
