@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	simulatorSteps = 10
+	simulatorSteps = 10000
 )
 
 type simulator struct {
