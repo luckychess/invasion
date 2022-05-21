@@ -8,7 +8,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/luckychess/invasion/world"
 	mock_world "github.com/luckychess/invasion/world/mock"
-	"gotest.tools/assert"
+	"gotest.tools/v3/assert"
 )
 
 func TestInit(t *testing.T) {
