@@ -15,14 +15,15 @@ import (
 // program entry point
 func main() {
 	log.SetFlags(0)
-	if len(os.Args) != 2 {
-		log.Fatalf("Usage: %s <N> where N is amount of aliens", os.Args[0])
+	// first argument is amount of alines, second is a file name with cities data
+	if len(os.Args) != 3 {
+		log.Fatalf("Usage: %s <N> <file>, where N is amount of aliens and file is a path to a file with cities data", os.Args[0])
 	}
 	totalAliens, err := strconv.ParseUint(os.Args[1], 10, 32)
 	if err != nil {
 		log.Fatalf("Command line argument expected to be a non-negative number: %s", err)
 	}
-	lines := readFile("input.txt")
+	lines := readFile(os.Args[2])
 	worldMap := parseInput(lines)
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
 	simulator := simulator.InitSimulation(worldMap, rng, uint32(totalAliens))
