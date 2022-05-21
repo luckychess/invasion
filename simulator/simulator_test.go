@@ -44,3 +44,19 @@ func TestSimulateOneAlien(t *testing.T) {
 	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 1)
 	simulator.Simulate()
 }
+
+func TestSimulateTwoAliens(t *testing.T) {
+	// two aliens, one city, city is instantly destroyed
+	ctrl := gomock.NewController(t)
+	mockWorld := mock_world.NewMockWorldMap(ctrl)
+	testCities := map[string]*world.City{
+		"Uglich": {},
+	}
+	mockWorld.EXPECT().GetCities().AnyTimes().Return(testCities)
+	mockWorld.EXPECT().AddAlien(gomock.Any()).Times(2)
+	mockWorld.EXPECT().MoveAlien(gomock.Any(), gomock.Any()).Times(0)
+	destroyMock := mockWorld.EXPECT().DestroyCity("Uglich").Times(1)
+	mockWorld.EXPECT().GetAliens().AnyTimes().After(destroyMock).Return(nil)
+	simulator := InitSimulation(mockWorld, rand.New(rand.NewSource(0)), 2)
+	simulator.Simulate()
+}
